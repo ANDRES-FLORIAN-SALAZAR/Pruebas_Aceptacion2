@@ -1,39 +1,71 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 import time
 
 def get_driver():
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
-    options.add_argument("--disable-gpu")
-    # options.add_argument("--headless")
     options.add_argument("--incognito")
+    return webdriver.Chrome(options=options)
 
-    driver = webdriver.Chrome(options=options)
+def registrar_usuario(driver):
     driver.get("https://demoqa.com/register")
-    return driver
+    time.sleep(2)
 
-def datos_registrarse(driver):
-    datos: dict[str, str] = {
+    datos = {
         "firstname": "Duvan Andres",
         "lastname": "Florian Salazar",
         "userName": "Andres.0810",
-        "password": "123456789",
+        "password": "123456789"
     }
-    
+
     for campo_id, valor in datos.items():
         driver.find_element(By.ID, campo_id).send_keys(valor)
         time.sleep(1)
 
-def seleccionar_captcha(driver):
-    driver.find_element(By.XPATH, "//iframe[contains(@src,https://www.google.com/recaptcha/api2/anchor?ar=1&amp;k=6LdsKacZAAAAAIxY1X8GuHZljebmKWs8JGp97UK7&amp;co=aHR0cHM6Ly9kZW1vcWEuY29tOjQ0Mw..&amp;hl=en&amp;type=image&amp;v=X-oVtzDcTGjZVms4LEgykmCV&amp;theme=light&amp;size=normal&amp;badge=bottomright&amp;cb=r7ycsr3r9v30)]").click()
-    time.sleep(0.5)
-    
+    # generar simulación de captcha
+    iframe = driver.find_element(By.XPATH, "//iframe[contains(@src, 'recaptcha')]")
+    driver.switch_to.frame(iframe)
+    driver.find_element(By.ID, "recaptcha-anchor").click()
+    time.sleep(3)
+    driver.switch_to.default_content()
+
+    # forzar el botón Register a estar habilitado
+    habilitar_boton_register(driver)
+
+    # Hacer clic en el botón Register
+    driver.find_element(By.ID, "register").click()
+    time.sleep(3)
+
+    # Volver a login
+    driver.find_element(By.ID, "gotologin").click()
+    time.sleep(2)
+
+def habilitar_boton_register(driver):
+    driver.execute_script("document.getElementById('register').disabled = false;")
+    time.sleep(1)
+
+def login_usuario(driver):
+    driver.find_element(By.ID, "userName").send_keys("Andres.0810")
+    driver.find_element(By.ID, "password").send_keys("123456789")
+    driver.find_element(By.ID, "login").click()
+    time.sleep(3)
+
+def verificar_login(driver):
+    try:
+        logout_btn = driver.find_element(By.ID, "submit")
+        if logout_btn.text.strip().lower() == "log out":
+            print("inicio de sesión exitoso.")
+        else:
+            print("inicio de sesión fallido.")
+    except:
+        print(" login fallido usuario no encontrado.")
+
 def main():
     driver = get_driver()
-    datos_registrarse(driver)
-    seleccionar_captcha(driver)
+    registrar_usuario(driver)
+    login_usuario(driver)
+    verificar_login(driver)
     driver.quit()
 
 if __name__ == "__main__":
