@@ -27,15 +27,15 @@ def registrar_usuario(driver):
     iframe = driver.find_element(By.XPATH, "//iframe[contains(@src, 'recaptcha')]")
     driver.switch_to.frame(iframe)
     driver.find_element(By.ID, "recaptcha-anchor").click()
-    time.sleep(3)
+    time.sleep(10)
     driver.switch_to.default_content()
 
-    # forzar el botón Register a estar habilitado
+    # Habilitar el botón Register de manera manual
     habilitar_boton_register(driver)
 
     # Hacer clic en el botón Register
     driver.find_element(By.ID, "register").click()
-    time.sleep(3)
+    time.sleep(10)
 
     # Volver a login
     driver.find_element(By.ID, "gotologin").click()
@@ -64,6 +64,7 @@ def verificar_login(driver):
 def main():
     driver = get_driver()
     registrar_usuario(driver)
+    
     login_usuario(driver)
     verificar_login(driver)
     driver.quit()
