@@ -16,7 +16,7 @@ def registrar_usuario(driver):
         "firstname": "Duvan Andres",
         "lastname": "Florian Salazar",
         "userName": "Andres.0810",
-        "password": "123456789"
+        "password": "Andres.0810",
     }
 
     for campo_id, valor in datos.items():
@@ -47,7 +47,7 @@ def habilitar_boton_register(driver):
 
 def login_usuario(driver):
     driver.find_element(By.ID, "userName").send_keys("Andres.0810")
-    driver.find_element(By.ID, "password").send_keys("123456789")
+    driver.find_element(By.ID, "password").send_keys("Andres.0810")
     driver.find_element(By.ID, "login").click()
     time.sleep(3)
 
@@ -64,7 +64,6 @@ def verificar_login(driver):
 def main():
     driver = get_driver()
     registrar_usuario(driver)
-    
     login_usuario(driver)
     verificar_login(driver)
     driver.quit()
