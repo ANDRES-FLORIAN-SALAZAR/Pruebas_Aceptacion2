@@ -13,45 +13,46 @@ def registrar_usuario(driver):
     time.sleep(2)
 
     datos = {
-        "firstname": "Duvan Andres",
+        "firstname":"Duvan Andres",
         "lastname": "Florian Salazar",
-        "userName": "Andres.0810",
-        "password": "Andres.0810",
+        "userName": "Andres08",
+        "password": "DuvanAndres03#",
     }
 
     for campo_id, valor in datos.items():
         driver.find_element(By.ID, campo_id).send_keys(valor)
         time.sleep(1)
 
-    # generar simulación de captcha
+    # Simulación de captcha
     iframe = driver.find_element(By.XPATH, "//iframe[contains(@src, 'recaptcha')]")
     driver.switch_to.frame(iframe)
     driver.find_element(By.ID, "recaptcha-anchor").click()
     time.sleep(10)
     driver.switch_to.default_content()
 
-    # Habilitar el botón Register de manera manual
     habilitar_boton_register(driver)
 
-    # Hacer clic en el botón Register
+    # Registro
     driver.find_element(By.ID, "register").click()
     time.sleep(10)
+    driver.save_screenshot("00_registroUsuario.png")
 
-    # Volver a login
+    # Ir a login
     driver.find_element(By.ID, "gotologin").click()
-    time.sleep(2)
+    time.sleep(3)
 
 def habilitar_boton_register(driver):
     driver.execute_script("document.getElementById('register').disabled = false;")
     time.sleep(1)
 
 def login_usuario(driver):
-    driver.find_element(By.ID, "userName").send_keys("Andres.0810")
-    driver.find_element(By.ID, "password").send_keys("Andres.0810")
+    driver.find_element(By.ID, "userName").send_keys("Andres08")
+    driver.find_element(By.ID, "password").send_keys("DuvanAndres03#")
     driver.find_element(By.ID, "login").click()
     time.sleep(3)
+    driver.save_screenshot("01_loginUsuario.png")
 
-def verificar_login(driver):
+def validar_login(driver):
     try:
         logout_btn = driver.find_element(By.ID, "submit")
         if logout_btn.text.strip().lower() == "log out":
@@ -60,12 +61,14 @@ def verificar_login(driver):
             print("inicio de sesión fallido.")
     except:
         print(" login fallido usuario no encontrado.")
+    driver.save_screenshot("02_inicioSesion.png")
 
 def main():
     driver = get_driver()
     registrar_usuario(driver)
     login_usuario(driver)
-    verificar_login(driver)
+    validar_login(driver)
+    time.sleep(3)
     driver.quit()
 
 if __name__ == "__main__":
