@@ -14,22 +14,32 @@ for img in images:
     src = img.get_attribute("src")
     
     if src:
-        response = requests.get(src)
-        if response.status_code >= 400 or not response.headers[
-            "Content-Type"
-        ].startswith("image"):
-            print(f"imagen invalida: {src}")
+        try:
+            response = requests.get(src, timeout=5)
+            if response.status_code >= 400 or not response.headers.get("Content-Type", "").startswith("image"):
+                print(f"Error: Imagen inválida: {src} (Status: {response.status_code})")
+            else:
+                print(f"OK: Imagen válida: {src}")
+        except requests.RequestException as e:
+            print(f"Error al acceder a la imagen {src}: {str(e)}")
 
 links = driver.find_elements(By.TAG_NAME, "a")
 
-print("LINKS")
+print("\nLINKS")
 print("-----")
 
 for link in links:
     href = link.get_attribute("href")
-
+    
     if href:
-        response = requests.get(href)
-        if response.status_code >= 400:
-            print(f"Link invalido: {href}")
+        try:
+            response = requests.get(href, timeout=5)
+            if response.status_code >= 400:
+                print(f"Error: Link inválido: {href} (Status: {response.status_code})")
+            else:
+                print(f"OK: Link válido: {href}")
+        except requests.RequestException as e:
+            print(f"Error al acceder al link {href}: {str(e)}")
+
+driver.quit()
 
