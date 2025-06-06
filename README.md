@@ -32,6 +32,22 @@ Este proyecto redefine la forma en que abordamos las pruebas de software, fusion
 
 ---
 
+## 📂 Estructura del Proyecto
+
+```
+Pruebas2/
+├── docs/                # Documentación adicional
+├── src/                 # Código fuente principal
+│   └── index.js         # Punto de entrada principal
+├── tests/               # Pruebas automatizadas
+│   └── main.test.js     # Pruebas principales
+├── package.json         # Dependencias y scripts de npm
+├── README.md            # Este archivo
+└── .github/             # Workflows de CI/CD y plantillas
+```
+
+---
+
 ## 🤖 ¿Por qué Pruebas2?
 
 - **Innovación:** Algoritmos de prueba de última generación.
